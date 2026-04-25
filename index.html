@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StageVision AI — Independent AI Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: #8B6914;
+    --black: #0A0A0A;
+    --black-2: #111111;
+    --black-3: #171717;
+    --white: #F0EDE8;
+    --white-dim: #9A9490;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–black);
+color: var(–white);
+font-family: ‘Barlow’, sans-serif;
+font-weight: 300;
+overflow-x: hidden;
+}
+
+/* NOISE OVERLAY */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.03’/%3E%3C/svg%3E”);
+pointer-events: none;
+z-index: 1000;
+opacity: 0.4;
+}
+
+/* NAV */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+padding: 20px 48px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+}
+
+.nav-logo {
+display: flex;
+align-items: center;
+gap: 12px;
+text-decoration: none;
+}
+
+.nav-logo img {
+width: 44px;
+height: 44px;
+object-fit: contain;
+}
+
+.nav-logo-text {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-weight: 600;
+font-size: 15px;
+letter-spacing: 0.15em;
+color: var(–gold);
+text-transform: uppercase;
+}
+
+.nav-links {
+display: flex;
+gap: 36px;
+list-style: none;
+}
+
+.nav-links a {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 13px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–white-dim);
+text-decoration: none;
+transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(–gold); }
+
+/* HERO */
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+position: relative;
+padding: 120px 48px 80px;
+overflow: hidden;
+}
+
+.hero-bg-ring {
+position: absolute;
+width: 700px;
+height: 700px;
+border-radius: 50%;
+border: 1px solid rgba(201,168,76,0.08);
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+animation: pulse-ring 6s ease-in-out infinite;
+}
+
+.hero-bg-ring:nth-child(2) {
+width: 500px;
+height: 500px;
+border-color: rgba(201,168,76,0.12);
+animation-delay: -2s;
+}
+
+.hero-bg-ring:nth-child(3) {
+width: 300px;
+height: 300px;
+border-color: rgba(201,168,76,0.18);
+animation-delay: -4s;
+}
+
+@keyframes pulse-ring {
+0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+50% { opacity: 1; transform: translate(-50%, -50%) scale(1.03); }
+}
+
+.hero-logo {
+width: 120px;
+height: 120px;
+object-fit: contain;
+margin-bottom: 40px;
+position: relative;
+z-index: 2;
+animation: fade-up 1s ease both;
+}
+
+.hero-eyebrow {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 12px;
+letter-spacing: 0.35em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 20px;
+position: relative;
+z-index: 2;
+animation: fade-up 1s ease 0.1s both;
+}
+
+.hero-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(64px, 10vw, 130px);
+line-height: 0.9;
+letter-spacing: 0.02em;
+color: var(–white);
+position: relative;
+z-index: 2;
+animation: fade-up 1s ease 0.2s both;
+}
+
+.hero-title span {
+color: var(–gold);
+display: block;
+}
+
+.hero-sub {
+font-size: 18px;
+font-weight: 300;
+color: var(–white-dim);
+max-width: 560px;
+line-height: 1.7;
+margin-top: 28px;
+position: relative;
+z-index: 2;
+animation: fade-up 1s ease 0.3s both;
+}
+
+.hero-stat-bar {
+display: flex;
+gap: 48px;
+margin-top: 60px;
+position: relative;
+z-index: 2;
+animation: fade-up 1s ease 0.4s both;
+}
+
+.hero-stat {
+text-align: center;
+}
+
+.hero-stat-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 42px;
+color: var(–gold);
+line-height: 1;
+}
+
+.hero-stat-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–white-dim);
+margin-top: 4px;
+}
+
+.hero-divider {
+width: 1px;
+height: 50px;
+background: rgba(201,168,76,0.2);
+align-self: center;
+}
+
+.scroll-hint {
+position: absolute;
+bottom: 40px;
+left: 50%;
+transform: translateX(-50%);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+z-index: 2;
+animation: fade-up 1s ease 0.8s both;
+}
+
+.scroll-hint span {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(–gold-dim);
+}
+
+.scroll-line {
+width: 1px;
+height: 40px;
+background: linear-gradient(to bottom, var(–gold-dim), transparent);
+animation: scroll-drop 2s ease-in-out infinite;
+}
+
+@keyframes scroll-drop {
+0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+}
+
+@keyframes fade-up {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTIONS */
+section {
+padding: 120px 48px;
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.section-full {
+max-width: 100%;
+padding: 0;
+}
+
+.section-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+letter-spacing: 0.35em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.section-label::before {
+content: ‘’;
+display: block;
+width: 32px;
+height: 1px;
+background: var(–gold);
+}
+
+.section-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(48px, 6vw, 80px);
+line-height: 0.95;
+color: var(–white);
+margin-bottom: 32px;
+}
+
+.section-title em {
+color: var(–gold);
+font-style: normal;
+}
+
+.section-body {
+font-size: 17px;
+line-height: 1.8;
+color: var(–white-dim);
+max-width: 640px;
+}
+
+.section-body p + p { margin-top: 16px; }
+
+/* ORIGIN SECTION */
+.origin-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: center;
+}
+
+.origin-quote {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: clamp(28px, 4vw, 48px);
+font-weight: 300;
+font-style: italic;
+line-height: 1.2;
+color: var(–white);
+border-left: 2px solid var(–gold);
+padding-left: 28px;
+}
+
+.origin-quote strong {
+color: var(–gold);
+font-style: normal;
+font-weight: 600;
+}
+
+/* SOMOS SECTION */
+.somos-wrap {
+background: var(–black-2);
+border-top: 1px solid rgba(201,168,76,0.1);
+border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+
+.somos-inner {
+max-width: 1200px;
+margin: 0 auto;
+padding: 120px 48px;
+}
+
+.arch-flow {
+display: flex;
+align-items: center;
+gap: 0;
+margin: 60px 0;
+overflow-x: auto;
+padding-bottom: 8px;
+}
+
+.arch-block {
+flex: 1;
+min-width: 140px;
+background: rgba(201,168,76,0.04);
+border: 1px solid rgba(201,168,76,0.15);
+padding: 24px 16px;
+text-align: center;
+position: relative;
+}
+
+.arch-block.trained {
+border-color: var(–gold);
+background: rgba(201,168,76,0.08);
+}
+
+.arch-block-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 8px;
+}
+
+.arch-block-name {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+color: var(–white);
+margin-bottom: 6px;
+}
+
+.arch-block-detail {
+font-size: 12px;
+color: var(–white-dim);
+}
+
+.arch-arrow {
+font-size: 20px;
+color: var(–gold-dim);
+flex-shrink: 0;
+padding: 0 8px;
+}
+
+.somos-outputs {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 16px;
+margin-top: 48px;
+}
+
+.output-card {
+background: rgba(201,168,76,0.04);
+border: 1px solid rgba(201,168,76,0.12);
+padding: 20px 16px;
+transition: border-color 0.3s, background 0.3s;
+}
+
+.output-card:hover {
+border-color: var(–gold);
+background: rgba(201,168,76,0.08);
+}
+
+.output-tag {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+color: var(–gold);
+margin-bottom: 8px;
+}
+
+.output-desc {
+font-size: 13px;
+color: var(–white-dim);
+line-height: 1.5;
+}
+
+.somos-stats {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1px;
+background: rgba(201,168,76,0.1);
+margin-top: 60px;
+}
+
+.stat-block {
+background: var(–black-2);
+padding: 32px 24px;
+text-align: center;
+}
+
+.stat-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 48px;
+color: var(–gold);
+line-height: 1;
+}
+
+.stat-unit {
+font-size: 18px;
+color: var(–gold-dim);
+}
+
+.stat-desc {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 12px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–white-dim);
+margin-top: 8px;
+}
+
+/* BENCHMARK */
+.benchmark-row {
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 16px 0;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.benchmark-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 14px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–white-dim);
+width: 80px;
+flex-shrink: 0;
+}
+
+.benchmark-bar-wrap {
+flex: 1;
+height: 6px;
+background: rgba(255,255,255,0.05);
+position: relative;
+}
+
+.benchmark-bar {
+height: 100%;
+background: linear-gradient(to right, var(–gold-dim), var(–gold-light));
+transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.benchmark-val {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+color: var(–gold);
+width: 80px;
+text-align: right;
+}
+
+.benchmark-note {
+font-size: 12px;
+color: var(–gold);
+width: 80px;
+text-align: right;
+}
+
+/* ALEXIS SECTION */
+.alexis-wrap {
+position: relative;
+overflow: hidden;
+}
+
+.alexis-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: start;
+}
+
+.feature-list {
+list-style: none;
+margin-top: 32px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+.feature-item {
+display: flex;
+gap: 16px;
+align-items: flex-start;
+}
+
+.feature-icon {
+width: 32px;
+height: 32px;
+border: 1px solid var(–gold);
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+font-size: 14px;
+color: var(–gold);
+margin-top: 2px;
+}
+
+.feature-text strong {
+display: block;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 15px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–white);
+margin-bottom: 4px;
+}
+
+.feature-text span {
+font-size: 14px;
+color: var(–white-dim);
+line-height: 1.5;
+}
+
+.alexis-callout {
+background: rgba(201,168,76,0.04);
+border: 1px solid rgba(201,168,76,0.2);
+border-left: 3px solid var(–gold);
+padding: 28px 28px;
+margin-top: 40px;
+}
+
+.alexis-callout p {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 20px;
+font-weight: 300;
+font-style: italic;
+color: var(–white);
+line-height: 1.4;
+}
+
+/* APEX SECTION */
+.apex-wrap {
+background: var(–black-3);
+border-top: 1px solid rgba(201,168,76,0.08);
+border-bottom: 1px solid rgba(201,168,76,0.08);
+}
+
+.apex-inner {
+max-width: 1200px;
+margin: 0 auto;
+padding: 120px 48px;
+}
+
+.apex-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+margin-top: 48px;
+}
+
+.apex-card {
+padding: 32px;
+border: 1px solid rgba(201,168,76,0.12);
+position: relative;
+overflow: hidden;
+}
+
+.apex-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 2px;
+background: linear-gradient(to right, transparent, var(–gold), transparent);
+opacity: 0;
+transition: opacity 0.3s;
+}
+
+.apex-card:hover::before { opacity: 1; }
+
+.apex-card-title {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 28px;
+color: var(–gold);
+margin-bottom: 12px;
+}
+
+.apex-card-body {
+font-size: 15px;
+line-height: 1.7;
+color: var(–white-dim);
+}
+
+.pill {
+display: inline-block;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–gold);
+border: 1px solid rgba(201,168,76,0.3);
+padding: 4px 12px;
+margin-top: 16px;
+}
+
+/* ABOUT */
+.about-layout {
+display: grid;
+grid-template-columns: 1fr 400px;
+gap: 80px;
+align-items: center;
+}
+
+.about-facts {
+display: flex;
+flex-direction: column;
+gap: 0;
+border: 1px solid rgba(201,168,76,0.12);
+}
+
+.about-fact {
+padding: 20px 24px;
+border-bottom: 1px solid rgba(201,168,76,0.08);
+display: flex;
+gap: 16px;
+align-items: center;
+}
+
+.about-fact:last-child { border-bottom: none; }
+
+.about-fact-dot {
+width: 6px;
+height: 6px;
+background: var(–gold);
+border-radius: 50%;
+flex-shrink: 0;
+}
+
+.about-fact-text {
+font-size: 15px;
+color: var(–white-dim);
+line-height: 1.5;
+}
+
+.about-fact-text strong {
+color: var(–white);
+font-weight: 600;
+}
+
+/* FOOTER */
+footer {
+border-top: 1px solid rgba(201,168,76,0.1);
+padding: 48px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.footer-logo {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.footer-logo img {
+width: 36px;
+height: 36px;
+object-fit: contain;
+}
+
+.footer-text {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 12px;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–gold);
+}
+
+.footer-copy {
+font-size: 13px;
+color: var(–white-dim);
+}
+
+.footer-tagline {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 12px;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–gold-dim);
+font-style: italic;
+}
+
+/* DIVIDER LINE */
+.gold-line {
+width: 100%;
+height: 1px;
+background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+nav { padding: 16px 24px; }
+.nav-links { display: none; }
+section { padding: 80px 24px; }
+.origin-grid, .alexis-grid, .apex-grid, .about-layout { grid-template-columns: 1fr; gap: 40px; }
+.somos-outputs { grid-template-columns: repeat(2, 1fr); }
+.somos-stats { grid-template-columns: repeat(2, 1fr); }
+.hero-stat-bar { gap: 24px; flex-wrap: wrap; justify-content: center; }
+footer { flex-direction: column; gap: 20px; text-align: center; }
+.somos-inner, .apex-inner { padding: 80px 24px; }
+.arch-flow { flex-wrap: wrap; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="logo.png" alt="StageVision AI">
+    <span class="nav-logo-text">StageVision AI</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#origin">Origin</a></li>
+    <li><a href="#somos">SoMoS</a></li>
+    <li><a href="#alexis">Alexis</a></li>
+    <li><a href="#apex">Apex</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+
+<div class="hero">
+  <div class="hero-bg-ring"></div>
+  <div class="hero-bg-ring"></div>
+  <div class="hero-bg-ring"></div>
+
+  <img src="logo.png" alt="StageVision AI" class="hero-logo">
+  <div class="hero-eyebrow">Independent AI Research</div>
+  <h1 class="hero-title">
+    StageVision
+    <span>AI</span>
+  </h1>
+  <p class="hero-sub">Building vision intelligence that sees, understands, and acts — on consumer hardware, between shifts, without a lab.</p>
+
+  <div class="hero-stat-bar">
+    <div class="hero-stat">
+      <div class="hero-stat-num">5.54B</div>
+      <div class="hero-stat-label">Parameters</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">12GB</div>
+      <div class="hero-stat-label">Consumer GPU</div>
+    </div>
+
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- ORIGIN -->
+
+<section id="origin">
+  <div class="origin-grid">
+    <div>
+      <div class="section-label">The Origin</div>
+      <h2 class="section-title">It Started With<br><em>A Posing Coach</em></h2>
+      <div class="section-body">
+        <p>StageVision AI began as a personal problem — helping competitive physique athletes nail their stage presentation. The original system, Apex, was built to analyze human movement and posing in real time using a custom-built Apex Movement Engine (AME).</p>
+        <p>Apex never shipped. Because somewhere in building it, the real problem revealed itself: not posing — perception. Not coaching — intelligence. The pivot wasn't a decision. It was inevitable.</p>
+        <p>Today StageVision AI is an independent research lab in everything but name. No degree. No funding. No institution. Just a third shift assembly worker in Fort Wayne, Indiana, pulling on a thread that won't let go.</p>
+      </div>
+    </div>
+    <div>
+      <div class="origin-quote">
+        "It always does when you start pulling on a <strong>real problem.</strong>"
+      </div>
+      <div class="alexis-callout" style="margin-top:32px;">
+        <p>What started as coaching logic for athletes became the foundation for a new class of vision-language model running on consumer hardware.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- SOMOS -->
+
+<div class="somos-wrap section-full" id="somos">
+  <div class="somos-inner">
+    <div class="section-label">The Model</div>
+    <h2 class="section-title">SoMoS<em>-MVL-4B</em></h2>
+    <p class="section-body">Custom Mixed Vision-Language Model. Built by surgically fusing NVIDIA Cosmos Reason 2 and Allen AI's Molmo2-VideoPoint-4B with a trained projection bridge. One frame in. Full scene understanding out.</p>
+
+```
+<!-- ARCHITECTURE -->
+<div class="arch-flow">
+  <div class="arch-block">
+    <div class="arch-block-label">Cosmos</div>
+    <div class="arch-block-name">Vision Encoder</div>
+    <div class="arch-block-detail">407M frozen</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-block">
+    <div class="arch-block-label">Cosmos LLM</div>
+    <div class="arch-block-name">Layers 0–7</div>
+    <div class="arch-block-detail">480M frozen</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-block trained">
+    <div class="arch-block-label">★ Trained</div>
+    <div class="arch-block-name">Projection Bridge</div>
+    <div class="arch-block-detail">5.25M trained</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-block">
+    <div class="arch-block-label">Molmo VideoPoint</div>
+    <div class="arch-block-name">LLM</div>
+    <div class="arch-block-detail">4B frozen</div>
+  </div>
+  <div class="arch-arrow">→</div>
+  <div class="arch-block" style="border-color:rgba(201,168,76,0.4);">
+    <div class="arch-block-label">Output</div>
+    <div class="arch-block-name">Target · Depth · Forecast</div>
+    <div class="arch-block-detail">5-class detection</div>
+  </div>
+</div>
+
+<!-- OUTPUTS -->
+<div class="somos-outputs">
+  <div class="output-card">
+    <div class="output-tag">TARGET</div>
+    <div class="output-desc">Pixel-accurate hostile coordinates. Cross-game — works on games it never trained on.</div>
+  </div>
+  <div class="output-card">
+    <div class="output-tag">WALL / FLOOR / STAIR</div>
+    <div class="output-desc">Navigation-aware scene segmentation. Knows what is traversable and what is not.</div>
+  </div>
+  <div class="output-card">
+    <div class="output-tag">PERSON</div>
+    <div class="output-desc">Friendly or neutral entity detection. Foundation for co-op awareness and friendly-fire prevention.</div>
+  </div>
+  <div class="output-card">
+    <div class="output-tag">DEPTH</div>
+    <div class="output-desc">Per-detection depth estimate. Feeds the predictive grounding layer for latency cancellation.</div>
+  </div>
+  <div class="output-card">
+    <div class="output-tag">COORDS 0–1000</div>
+    <div class="output-desc">Normalized pixel coordinates per detection. Drop-in compatible with existing motor control layer.</div>
+  </div>
+</div>
+
+</div>
+
+<!-- STATS -->
+<div class="somos-stats">
+  <div class="stat-block">
+    <div class="stat-num">5.54<span class="stat-unit">B</span></div>
+    <div class="stat-desc">Total Parameters</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">6.45<span class="stat-unit">M</span></div>
+    <div class="stat-desc">Trained by David</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">5<span class="stat-unit">-class</span></div>
+    <div class="stat-desc">Detection Output</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">12<span class="stat-unit">GB</span></div>
+    <div class="stat-desc">Consumer GPU</div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- WIP -->
+
+<section style="padding: 60px 48px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="background:rgba(201,168,76,0.04); border:1px solid rgba(201,168,76,0.2); border-left:3px solid var(--gold); padding:28px 32px; display:flex; align-items:flex-start; gap:20px;">
+      <div style="font-family:Bebas Neue,sans-serif; font-size:28px; color:var(--gold); flex-shrink:0;">WIP</div>
+      <div>
+        <div style="font-family:Barlow Condensed,sans-serif; font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">Active Research — Not Yet Fully Operational</div>
+        <p style="font-size:15px; color:var(--white-dim); line-height:1.7;">SoMoS and Project Alexis are active research projects. The architecture is being developed and tested — benchmarks reflect controlled evaluations, not live deployment. This is the work in progress, not the finished product.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- ALEXIS -->
+
+<section id="alexis" class="alexis-wrap">
+  <div class="alexis-grid">
+    <div>
+      <div class="section-label">The Agent</div>
+      <h2 class="section-title">Project<br><em>Alexis</em></h2>
+      <div class="section-body">
+        <p>Vision-only autonomous FPS agent and AI companion. No game APIs. No memory readers. Pure VLM. The same perception stack that understands a battlefield understands a living room.</p>
+        <p>SoMoS powers the eyes. Alexis decides what to do with what she sees.</p>
+      </div>
+
+```
+  <ul class="feature-list">
+    <li class="feature-item">
+      <div class="feature-icon">⊕</div>
+      <div class="feature-text">
+        <strong>Cross-Game Universal</strong>
+        <span>Same model, same prompts across Borderlands 3, Doom Eternal, Halo. No game-specific training.</span>
+      </div>
+    </li>
+    <li class="feature-item">
+      <div class="feature-icon">⊕</div>
+      <div class="feature-text">
+        <strong>Decoupled Perception / Action</strong>
+        <span>Vision runs on the Predator laptop. Control fires over LAN to a handheld running the game.</span>
+      </div>
+    </li>
+    <li class="feature-item">
+      <div class="feature-icon">⊕</div>
+      <div class="feature-text">
+        <strong>Predictive Grounding</strong>
+        <span>Pixel coordinates treated as a time series. Extrapolates forward to cancel inference latency.</span>
+      </div>
+    </li>
+    <li class="feature-item">
+      <div class="feature-icon">⊕</div>
+      <div class="feature-text">
+        <strong>Always-On Companion</strong>
+        <span>Lives on a Mac Mini M4. Remembers conversations, moods, and gameplay sessions. Connected to Meta Ray-Ban glasses — sees what you see, responds through the earpiece.</span>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div>
+  <div class="alexis-callout">
+    <p>"She's not a bot. She's a presence."</p>
+  </div>
+  <div style="margin-top:32px;">
+    <div class="section-label">Stack</div>
+    <div class="about-facts" style="margin-top:16px;">
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Mac Mini M4</strong> — Brain, personality, memory, voice</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Acer Predator RTX 5070 Ti</strong> — Vision inference via SoMoS</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Legion Go</strong> — Game execution target</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Meta Ray-Ban Glasses</strong> — Real-world perception layer</div></div>
+         </div>
+  </div>
+  <div style="margin-top:24px;" class="section-body" style="font-size:15px;">
+    <p style="font-size:14px;color:var(--white-dim);line-height:1.6;">If it works for video games, it translates to robotics. The perception outputs — target coordinates, depth, traversability, entity classification — are domain-agnostic. The game is the test bench.</p>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<div class="gold-line"></div>
+
+<!-- APEX -->
+
+<div class="apex-wrap section-full" id="apex">
+  <div class="apex-inner">
+    <div class="section-label">Where It Began</div>
+    <h2 class="section-title">Apex &<br><em>The AME</em></h2>
+    <p class="section-body">The original StageVision AI product — never released, but never wasted. Apex was an AI coaching system built to analyze human movement, positioning, and control in real time. It ran on a custom-built proprietary system called the Apex Movement Engine.</p>
+
+```
+<div class="apex-grid">
+  <div class="apex-card">
+    <div class="apex-card-title">Apex — AI Coaching System</div>
+    <div class="apex-card-body">Designed to evaluate posture, angles, symmetry, and stability to deliver clear, actionable feedback — just like a professional coach would. Built initially for competitive physique athletes on stage, the system was domain-agnostic by design. The same intelligence was being expanded into strength training, physical therapy, rehabilitation, and athletic movement analysis.</div>
+    <div class="pill">Patent Pending</div>
+  </div>
+  <div class="apex-card">
+    <div class="apex-card-title">Apex Movement Engine (AME)</div>
+    <div class="apex-card-body">The proprietary perception layer beneath Apex. The AME goes beyond static analysis — detecting pose quality and consistency, identifying inefficiencies and imbalance drift, providing real-time coaching cues, and locking optimal positions for deeper review. It brought real coaching logic into the digital age. The principles built into AME became the conceptual foundation for SoMoS.</div>
+    <div class="pill">Foundation of SoMoS</div>
+  </div>
+</div>
+
+<div class="alexis-callout" style="margin-top:48px;">
+  <p>Apex isn't just an app feature — it's a scalable AI coaching platform that pivoted into something bigger. The pivot wasn't a failure. It was the work revealing what it actually wanted to be.</p>
+</div>
+```
+
+  </div>
+</div>
+
+<div class="gold-line"></div>
+
+<!-- ABOUT -->
+
+<section id="about">
+  <div class="about-layout">
+    <div>
+      <div class="section-label">The Builder</div>
+      <h2 class="section-title">Built Solo.<br><em>Between Shifts.</em></h2>
+      <div class="section-body">
+        <p>There is no lab. No team. No institutional backing. StageVision AI is one person — David Wise — building because he can't stop.</p>
+      </div>
+      <div class="alexis-callout" style="margin-top:32px;">
+        <p>"I think I'm building something special. I'd like the world to think so too."</p>
+      </div>
+    </div>
+    <div class="about-facts">
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Third shift assembly worker</strong> — General Motors, Fort Wayne, IN — Based in Muncie, IN — 13+ years</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Stanford ML Certificate</strong> — Completed via Coursera between shifts</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>Hardware</strong> — $1,500 Acer Predator laptop, RTX 5070 Ti 12GB</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>StageVision AI LLC</strong> — Independent AI research</div></div>
+      <div class="about-fact"><div class="about-fact-dot"></div><div class="about-fact-text"><strong>TRT-LLM ports</strong> — Molmo2-4B, Molmo2-VideoPoint-4B, Qwen3-VL-2B on consumer Blackwell</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<div class="gold-line"></div>
+<footer>
+  <div class="footer-logo">
+    <img src="logo.png" alt="StageVision AI">
+    <span class="footer-text">StageVision AI</span>
+  </div>
+  <div class="footer-copy">© 2025–2026 StageVision AI LLC — Independent AI Research</div>
+  <div class="footer-tagline">Built solo. Between shifts. On a laptop.</div>
+</footer>
+
+</body>
+</html>
